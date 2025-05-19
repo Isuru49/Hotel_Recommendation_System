@@ -1,27 +1,28 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const cors = require('cors');
+import express from 'express';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import cors from 'cors';
 
-
-const authRoutes = require('./routes/authRoutes');
-const hotelRoutes = require('./routes/hotelRoutes');
+import authRoutes from './routes/authRoutes.js';
+import hotelRoutes from './routes/hotelRoutes.js';
 
 dotenv.config();
+
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-}).then(() => console.log("MongoDB connected"))
+// MongoDB connection
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('MongoDB connected'))
   .catch(err => console.log(err));
 
+// Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/hotels', hotelRoutes);
 
+// Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
